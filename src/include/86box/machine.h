@@ -665,4 +665,7 @@ extern const device_t	*xi8088_get_device(void);
 #endif
 
 
+extern int	machine_xt_eaglepc1600_init(const machine_t *);
+extern int	machine_xt_eaglepce_init(const machine_t *);
+
 #endif	/*EMU_MACHINE_H*/
