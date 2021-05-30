@@ -868,3 +868,37 @@ machine_at_olim300_15_init(const machine_t *model)
     return ret;
 }
 
+/*
+ * Current bugs: 
+ * - no EMS/shadow management due to missing chip implementation (OLIMCU16)
+ */
+int
+machine_at_olim290s_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/olivetti_m290s/286-olivetti-m203-low.bin",
+				L"roms/machines/olivetti_m290s/286-olivetti-m203-high.bin",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+
+    /* replace with correct chipset implementation */
+    //mem_remap_top(384);
+
+    //found 208-209-68-6a
+    device_add(&addr_debugger_device);
+    device_add(&neat_device);
+    
+    device_add(&keyboard_ps2_olivetti_device);
+    device_add(&fdc_at_device);  
+
+    /* should use custom BIOS */
+	if (gfxcard == VID_INTERNAL)
+        device_add(&paradise_pvga1a_onboard_device);
+    
+    return ret;
+}
