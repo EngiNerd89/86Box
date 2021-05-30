@@ -868,3 +868,67 @@ machine_at_olim300_15_init(const machine_t *model)
     return ret;
 }
 
+/*
+ * Current bugs: 
+ * - soft-reboot causes a fatal error
+ * - BIOS throws a cache memory error (since L2 cache is not implemented yet), pressing F1 allows to continue booting.
+ * - no shadow memory due to incomplete chipset implementation (custom ASIC)
+ */
+int
+machine_at_olim300_10_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/olivetti_m300_10/BIOS.ROM",
+			   0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_ide_init(model);
+
+    device_add(&olivetti_nord_device);
+    
+    device_add(&keyboard_ps2_olivetti_device);
+    
+    /* On-board FDC cannot be disabled */
+    device_add(&fdc_dp8473_device);
+    
+    /* should be a PVGA1B/WD90C00 with custom BIOS */
+	if (gfxcard == VID_INTERNAL)
+        device_add(&paradise_wd90c11_device);
+
+    return ret;
+}
+
+/*
+ * Current bugs: 
+ * - soft-reboot causes a fatal error
+ * - no shadow memory due to incomplete chipset implementation (custom ASIC)
+ */
+int
+machine_at_olim300_05_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/olivetti_m300_05/BIOS.ROM",
+			   0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_ide_init(model);
+    
+    device_add(&olivetti_nord_device);
+
+    device_add(&keyboard_ps2_olivetti_device);
+    
+    /* On-board FDC cannot be disabled */
+    device_add(&fdc_dp8473_device);
+    
+    /* should be a PVGA1B/WD90C00 with custom BIOS */
+	if (gfxcard == VID_INTERNAL)
+        device_add(&paradise_wd90c11_device);
+
+    return ret;
+}
