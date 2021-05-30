@@ -231,9 +231,11 @@ cga_poll(void *p)
 				}
 			}
 		}
+		//80-col
 		if (cga->cgamode & 1) {
 			for (x = 0; x < cga->crtc[1]; x++) {
 				if (cga->cgamode & 8) {	
+					//enable video output
 					chr = cga->charbuffer[x << 1];
 					attr = cga->charbuffer[(x << 1) + 1];
 				} else
@@ -241,6 +243,7 @@ cga_poll(void *p)
 				drawcursor = ((cga->ma == ca) && cga->con && cga->cursoron);
 				cols[1] = (attr & 15) + 16;
 				if (cga->cgamode & 0x20) {
+					//blink
 					cols[0] = ((attr >> 4) & 7) + 16;
 					if ((cga->cgablink & 8) && (attr & 0x80) && !cga->drawcursor) 
 						cols[1] = cols[0];
@@ -262,6 +265,7 @@ cga_poll(void *p)
 				cga->ma++;
 			}
 		} else if (!(cga->cgamode & 2)) {
+			//40-col
 			for (x = 0; x < cga->crtc[1]; x++) {
 				if (cga->cgamode & 8) {
 					chr  = cga->vram[((cga->ma << 1) & 0x3fff)];
@@ -296,6 +300,7 @@ cga_poll(void *p)
 				}
 			}
 		} else if (!(cga->cgamode & 16)) {
+			//low res
 			cols[0] = (cga->cgacol & 15) | 16;
 			col = (cga->cgacol & 16) ? 24 : 16;
 			if (cga->cgamode & 4) {
@@ -327,9 +332,11 @@ cga_poll(void *p)
 				}
 			}
 		} else {
+			//high res
 			cols[0] = 0; cols[1] = (cga->cgacol & 15) + 16;
 			for (x = 0; x < cga->crtc[1]; x++) {
 				if (cga->cgamode & 8)	
+				//enable video
 					dat = (cga->vram[((cga->ma << 1) & 0x1fff) + ((cga->sc & 1) * 0x2000)] << 8) | cga->vram[((cga->ma << 1) & 0x1fff) + ((cga->sc & 1) * 0x2000) + 1];
 				else
 					dat = 0;
@@ -354,6 +361,7 @@ cga_poll(void *p)
 	}
 
 	if (cga->cgamode & 1)
+		//high res
 		x = (cga->crtc[1] << 3) + 16;
 	else
 		x = (cga->crtc[1] << 4) + 16;

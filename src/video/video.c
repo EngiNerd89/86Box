@@ -915,7 +915,23 @@ video_force_resize_set(uint8_t res)
 }
 
 void
-loadfont_common(FILE *f, int format)
+loadfont_interleaved(FILE *of, FILE *ef, int format)
+{
+	int c, d;
+	switch (format) {
+	case 10:		/* Corona 16x16 */
+		for (c=0; c<1024; c++)
+			for (d=0; d<8; d++) {
+				fontdatm[c][d] = fgetc(of) & 0xff;
+				fontdatm[c][d+1] = fgetc(ef) & 0xff;
+			}
+		break;
+	}
+	
+}
+
+void
+loadfont_linear(FILE *f, int format)
 {
     int c, d;
 	
@@ -1035,27 +1051,41 @@ loadfont_common(FILE *f, int format)
 		
 	}
 
-    (void)fclose(f);
 }
 
 void
-loadfont_ex(wchar_t *s, int format, int offset)
+loadfont_ex(wchar_t *s, wchar_t *aux, int format, int offset)
 {
 	FILE *f;
+	FILE *auxf;
     
     f = rom_fopen(s, L"rb");
     if (f == NULL)
 		return;
-
+	
 	fseek(f, offset, SEEK_SET);
-	loadfont_common(f, format);
+
+	if (aux != NULL) {
+		auxf = rom_fopen(aux, L"rb");
+    	if (auxf == NULL)
+			return;
+		
+		fseek(auxf, offset, SEEK_SET);
+		loadfont_interleaved(f, auxf, format);
+		(void)fclose(auxf);
+
+	} else {
+		loadfont_linear(f, format);
+	}
+
+	(void)fclose(f);
 
 }
 
 void
 loadfont(wchar_t *s, int format)
 {
-    loadfont_ex(s, format, 0);
+    loadfont_ex(s, NULL, format, 0);
 }
 
 uint32_t

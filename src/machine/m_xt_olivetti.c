@@ -537,7 +537,7 @@ m19_vid_init(olim19_vid_t *vid)
     /* display_type = device_get_config_int("display_type"); */
 
     /* OGC emulation part begin */
-    loadfont_ex(L"roms/machines/olivetti_m19/BIOS.BIN", 1, 90);
+    loadfont_ex(L"roms/machines/olivetti_m19/BIOS.BIN", NULL, 1, 90);
     /* composite is not working yet */
     vid->ogc.cga.composite = 0; // (display_type != CGA_RGB);
     /* vid->ogc.cga.snow_enabled = device_get_config_int("snow_enabled"); */

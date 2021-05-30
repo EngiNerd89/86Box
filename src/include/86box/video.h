@@ -173,7 +173,7 @@ extern uint8_t	video_force_resize_get(void);
 extern void	video_force_resize_set(uint8_t res);
 extern void	video_update_timing(void);
 
-extern void	loadfont_ex(wchar_t *s, int format, int offset);
+extern void	loadfont_ex(wchar_t *s, wchar_t *aux, int format, int offset);
 extern void	loadfont(wchar_t *s, int format);
 
 extern int	get_actual_size_x(void);
@@ -196,6 +196,7 @@ extern const device_t mach64gx_isa_device;
 extern const device_t mach64gx_vlb_device;
 extern const device_t mach64gx_pci_device;
 extern const device_t mach64vt2_device;
+extern const device_t mach64ct_onboard_pci_device;
 
 /* ATi 18800 */
 extern const device_t ati18800_wonder_device;
@@ -296,6 +297,7 @@ extern const device_t oti067_m300_device;
 extern const device_t oti077_device;
 
 /* Paradise/WD (S)VGA */
+extern const device_t paradise_pvga1a_onboard_device;
 extern const device_t paradise_pvga1a_ncr3302_device;
 extern const device_t paradise_pvga1a_pc2086_device;
 extern const device_t paradise_pvga1a_pc3086_device;
@@ -339,6 +341,7 @@ extern const device_t s3_elsa_winner2000_pro_x_964_vlb_device;
 extern const device_t s3_elsa_winner2000_pro_x_pci_device;
 extern const device_t s3_elsa_winner2000_pro_x_vlb_device;
 extern const device_t s3_trio64v2_dx_pci_device;
+extern const device_t s3_phoenix_trio64v2_dx_onboard_pci_device;
 
 /* S3 ViRGE */
 extern const device_t s3_virge_325_vlb_device;
