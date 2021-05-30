@@ -125,7 +125,7 @@ const machine_t machines[] = {
 #if defined(DEV_BRANCH) && defined(USE_OLIVETTI)
     { "[ISA] Olivetti M290",			"m290",			MACHINE_TYPE_286,		CPU_PKG_286, 0, 0, 0, 0, 0, 0, 0,               	                    					MACHINE_AT,									  640, 16384, 128, 127,		      machine_at_olim290_init, NULL			},
 #endif
-    #if defined(DEV_BRANCH) && defined(USE_OPEN_AT)
+#if defined(DEV_BRANCH) && defined(USE_OPEN_AT)
     { "[ISA] OpenAT",				"open_at",		MACHINE_TYPE_286,		CPU_PKG_286, 0, 0, 0, 0, 0, 0, 0,										MACHINE_AT,									  256, 15872, 128,   63,	      machine_at_open_at_init, NULL			},
 #endif
     { "[ISA] Phoenix IBM AT",			"ibmatpx",		MACHINE_TYPE_286,		CPU_PKG_286, 0, 6000000, 8000000, 0, 0, 0, 0,									MACHINE_AT,									  256, 15872, 128,   63,	      machine_at_ibmatpx_init, NULL			},
@@ -436,6 +436,8 @@ const machine_t machines[] = {
     /* Miscellaneous/Fake/Hypervisor machines */
     { "[i440BX] Microsoft Virtual PC 2007",	"vpc2007",		MACHINE_TYPE_MISC,		CPU_PKG_SLOT1, CPU_BLOCK(CPU_PENTIUM2, CPU_CYRIX3S), 0, 0, 0, 0, 0, 0,						MACHINE_AGP | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,		  		 8192,1048576, 8192, 255,	      machine_at_vpc2007_init, NULL			},
 
+    { "[ISA] Zenith Data Systems Z-241/248",		"zdsz200",		MACHINE_TYPE_286,		CPU_PKG_286, 0, 0, 0, 0, 0, 0, 0,                                   MACHINE_AT,									640,16384, 128, 127,		machine_at_z200_init, NULL			},
+    { "[ISA] Zenith Data Systems Z-386",		"zdsz386",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 0, 0, 0, 0, 0, 0,										MACHINE_AT,									  1024,  16384,  1024, 127,	 machine_at_z386_init, NULL			},    
     { NULL,					NULL,			MACHINE_TYPE_NONE,		0, 0, 0, 0, 0, 0, 0, 0,												0,										    0,      0,    0,   0,			         NULL, NULL			}
 };
 
