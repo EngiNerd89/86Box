@@ -436,6 +436,8 @@ const machine_t machines[] = {
     /* Miscellaneous/Fake/Hypervisor machines */
     { "[i440BX] Microsoft Virtual PC 2007",	"vpc2007",		MACHINE_TYPE_MISC,		CPU_PKG_SLOT1, CPU_BLOCK(CPU_PENTIUM2, CPU_CYRIX3S), 0, 0, 0, 0, 0, 0,						MACHINE_AGP | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,		  		 8192,1048576, 8192, 255,	      machine_at_vpc2007_init, NULL			},
 
+    { "[SCAMP] Magnavox 286",		"magnavox_286",	MACHINE_TYPE_286,		CPU_PKG_286, 0, 0, 0, 0, 0, 0, 0,										MACHINE_AT | MACHINE_IDE | MACHINE_VIDEO,			 1024,  8192,  512, 127,    machine_at_p3239_init, NULL	},
+    { "[SCAMP] Philips P3348/Magnavox 386SX",		"p3348",	MACHINE_TYPE_386SX,		CPU_PKG_386SX, 0, 0, 0, 0, 0, 0, 0,										MACHINE_AT | MACHINE_IDE | MACHINE_VIDEO,			 1024,  8192,  512, 127,    machine_at_p3239_init, NULL	},
     { NULL,					NULL,			MACHINE_TYPE_NONE,		0, 0, 0, 0, 0, 0, 0, 0,												0,										    0,      0,    0,   0,			         NULL, NULL			}
 };
 

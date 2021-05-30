@@ -868,3 +868,43 @@ machine_at_olim300_15_init(const machine_t *model)
     return ret;
 }
 
+
+/*
+ * Current bugs:
+ * - cpu speed is incorrectly reported
+ * - returns options error at boot if fpu not installed
+ */
+int
+machine_at_p3239_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/philips_p3239/386-Philips-P3239.BIN",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_init(model);
+
+    device_add(&keyboard_ps2_ami_device);
+
+    /* FDC is not controlled by SCAMP I/O */
+    if (fdc_type == FDC_INTERNAL)
+        device_add(&fdc_at_device);
+
+    device_add(&vlsi_scamp_device);
+    device_add(&vl82c107_device);
+
+    //50-52-f5
+    device_add(&addr_debugger_device);
+
+    //video is cl-gd5325
+    if (gfxcard == VID_INTERNAL)
+    	device_add(&vga_device);
+
+    //video is wd90c11
+    
+    return ret;
+}
+

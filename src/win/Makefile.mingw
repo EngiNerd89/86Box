@@ -658,7 +658,7 @@ SIOOBJ		:= sio_acc3221.o \
 		    sio_w83787f.o \
 		    sio_w83877f.o sio_w83977f.o \
 		    sio_um8669f.o \
-		    sio_vt82c686.o
+		    sio_vl82c107.o sio_vt82c686.o
 
 FDDOBJ		:= fdd.o fdc.o fdc_magitronic.o fdc_pii15xb.o \
 		   fdi2raw.o \
