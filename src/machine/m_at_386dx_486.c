@@ -1130,3 +1130,91 @@ machine_at_pcm5330_init(const machine_t *model)
 
     return ret;
 }
+
+/*
+ * Current bugs: 
+ * - RLL/MFM/ESDI hard disk controllers do not work
+ * - BIOS shadowing not implemented
+ */
+int
+machine_at_epson_ax3_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/epson_ax3/EVAX3",
+				L"roms/machines/epson_ax3/ODAX3",
+				0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_init(model);
+
+    /* replace with correct chipset implementation */
+    //mem_remap_top(384);
+
+    //found 22-23
+    device_add(&addr_debugger_device);
+
+    device_add(&epson_e01161na_device);
+
+    device_add(&keyboard_at_device);
+    
+    if (fdc_type == FDC_INTERNAL)	
+	    device_add(&fdc_at_device);
+    
+    return ret;
+}
+
+
+//not working (post error 1d 1c) --> works with debugger
+int
+machine_at_epson_ax3_33port_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_ax3_33port/AX33POR",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //found 1b0-1bf
+    device_add(&epson_e01161na_device);
+
+    device_add(&vga_device);
+    
+    return ret;
+}
+
+
+//unknown specs, epson bios
+//returns xms error
+int
+machine_at_epson_el3_33_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_el3_33/M4.107",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    mem_remap_top(384);
+
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_nsc_device);
+
+    //1b0-1bf
+    device_add(&epson_e01161na_device);
+
+    //video may be wd90c10??
+    
+    return ret;
+}

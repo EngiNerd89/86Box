@@ -436,6 +436,16 @@ const machine_t machines[] = {
     /* Miscellaneous/Fake/Hypervisor machines */
     { "[i440BX] Microsoft Virtual PC 2007",	"vpc2007",		MACHINE_TYPE_MISC,		CPU_PKG_SLOT1, CPU_BLOCK(CPU_PENTIUM2, CPU_CYRIX3S), 0, 0, 0, 0, 0, 0,						MACHINE_AGP | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,		  		 8192,1048576, 8192, 255,	      machine_at_vpc2007_init, NULL			},
 
+    { "[ISA] EPSON PC-AX2e/Equity IIe",		"epson_ax2e",		MACHINE_TYPE_286,		CPU_PKG_286, 0, 8000000, 12000000, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE,				1024, 16384, 1024, 127,		 machine_at_epson_ax2e_init, NULL			},
+    { "[ISA] EPSON EL2",			"epson_el2",		MACHINE_TYPE_286,		CPU_PKG_286, 0, 8000000, 12000000, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO,	    1024, 16384, 1024, 127,		 machine_at_epson_el2_init, NULL			},
+    { "[ISA] EPSON L2",			"epson_l2",		MACHINE_TYPE_286,		CPU_PKG_286, 0, 12000000, 12000000, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO_FIXED,	    2048, 6144, 2048, 127,		 machine_at_epson_l2_init, NULL			},
+    { "[ISA] EPSON PC-AX3s/Equity 386SX",	"epson_ax3s",		MACHINE_TYPE_386SX,		CPU_PKG_386SX, 0, 16000000, 16000000, 0, 0, 0, 0,					MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE,					1024, 14336, 1024, 127,			 machine_at_epson_ax3s_init, NULL		},
+    { "[ISA] EPSON PC-AX3s Portable",			"epson_ax3sport",		MACHINE_TYPE_386SX,		CPU_PKG_386SX, 0, 16000000, 16000000, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO_FIXED,		2048, 6144, 1024, 127,		 machine_at_epson_ax3sport_init, NULL			},
+    { "[ISA] EPSON EL3s",			"epson_el3s",		MACHINE_TYPE_386SX,		CPU_PKG_386SX, 0, 16000000, 16000000, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO,				2048, 16384, 1024, 127,		 machine_at_epson_el3s_init, NULL			},
+    { "[ISA] EPSON L3s",			"epson_l3s",		MACHINE_TYPE_386SX,		CPU_PKG_386SX, 0, 16000000, 16000000, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO_FIXED,				2048, 6144, 2048, 127,		 machine_at_epson_l3s_init, NULL			},
+    { "[ISA] EPSON PC-AX3/Equity 386/20",		"epson_ax3",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 20000000, 20000000, 0, 0, 0, 0,										MACHINE_AT,									  1024,  16384,  1024, 127,	 machine_at_epson_ax3_init, NULL			},
+    { "[ISA] EPSON PC-AX3/33 Portable",		"epson_ax3_33port",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 33000000, 33000000, 0, 0, 0, 0,										MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO_FIXED,	 4096,  16384,  1024, 127,	 machine_at_epson_ax3_33port_init, NULL			},
+    { "[ISA] EPSON EL3/33",		"epson_el3_33",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 33000000, 33000000, 0, 0, 0, 0,										MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE,						  2048,  16384,  1024, 127,	 machine_at_epson_el3_33_init, NULL			},
     { NULL,					NULL,			MACHINE_TYPE_NONE,		0, 0, 0, 0, 0, 0, 0, 0,												0,										    0,      0,    0,   0,			         NULL, NULL			}
 };
 

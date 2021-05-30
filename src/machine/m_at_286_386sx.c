@@ -868,3 +868,199 @@ machine_at_olim300_15_init(const machine_t *model)
     return ret;
 }
 
+/*
+ * Current bugs:
+ * - no EMS management due to missing chipset implementation (custom ASIC)
+ */
+int
+machine_at_epson_ax2e_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/epson_ax2e/EVAXE",
+				L"roms/machines/epson_ax2e/ODAXE",
+				0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+
+    //found 1b0-1bf
+    device_add(&epson_e01161na_device);
+
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+    
+    return ret;
+}
+
+/*
+ * Current bugs:
+ * - enabling parallel/serial ports causes cmos error
+ * - ports 3c0-3cf?
+ */
+int
+machine_at_epson_el2_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/epson_el2/EVEL2",
+				L"roms/machines/epson_el2/ODEL2",
+				0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_nsc_device);   
+
+    //found 1b0-1bf
+    device_add(&epson_e01161na_device);
+ 
+    
+    /* should be a WD90C10 */
+    if (gfxcard == VID_INTERNAL)
+        device_add(&vga_device);
+
+    return ret;
+}
+
+
+/*
+ * Current bugs:
+ * - BIOS throws an extended memory error on boot, pressing F1 allows to continue booting.
+ * - enabling parallel/serial ports causes cmos error
+ */
+int
+machine_at_epson_ax3s_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/epson_ax3s/EVAXS",
+				L"roms/machines/epson_ax3s/ODAXS",
+				0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //1b0-1bf
+    device_add(&epson_e01161na_device);
+
+    
+    return ret;
+}
+
+/*
+ * Current bugs:
+ * - returns xms error due to missing chipset implementation
+ * - enabling ports causes cmos checksum error (superio?)
+ */
+int
+machine_at_epson_el3s_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/epson_el3s/M3_108.1-2",
+				L"roms/machines/epson_el3s/M3_108.2-2",
+				0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_nsc_device);
+
+    //1b0-1bf
+    device_add(&epson_e01161na_device);
+
+
+    /* should be a WD90C10 */
+    if (gfxcard == VID_INTERNAL)
+        device_add(&vga_device);
+
+    return ret;
+}
+
+//fdc not working, also parallel port error
+int
+machine_at_epson_l2_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_l2/L2",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //1b0-1bf
+    device_add(&epson_e01161na_device);
+
+
+    device_add(&vga_device);
+    
+    return ret;
+}
+
+//fdc not working, also parallel port error
+int
+machine_at_epson_l3s_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_l3s/L3",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //1b0-1bf
+    device_add(&epson_e01161na_device);
+
+    
+    device_add(&vga_device);
+    
+    return ret;
+}
+
+//not working (post code 1d 1c) --> works with debugger
+int
+machine_at_epson_ax3sport_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_ax3sport/AX3SPOR",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+    device_add(&vga_device);
+
+    //1b0-1bf
+    device_add(&epson_e01161na_device);
+
+    
+    return ret;
+}
