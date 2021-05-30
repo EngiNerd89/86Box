@@ -664,5 +664,8 @@ extern int	machine_xt_xi8088_init(const machine_t *);
 extern const device_t	*xi8088_get_device(void);
 #endif
 
+extern int	machine_at_olipcs286_init(const machine_t *);
+extern int	machine_at_olipcs286s_init(const machine_t *);
+extern int  machine_at_olipcs386sx_init(const machine_t *);
 
 #endif	/*EMU_MACHINE_H*/

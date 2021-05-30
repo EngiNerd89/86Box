@@ -352,6 +352,13 @@ void *paradise_init(const device_t *info, uint32_t memsize)
         return paradise;
 }
 
+static void *paradise_pvga1a_onboard_init(const device_t *info)
+{
+        paradise_t *paradise = paradise_init(info, 1 << 18);
+        
+        return paradise;
+}
+
 static void *paradise_pvga1a_ncr3302_init(const device_t *info)
 {
         paradise_t *paradise = paradise_init(info, 1 << 18);
@@ -533,6 +540,20 @@ const device_t paradise_pvga1a_ncr3302_device =
         0,
 	PVGA1A,
         paradise_pvga1a_ncr3302_init,
+        paradise_close,
+        NULL,
+	{ NULL },
+        paradise_speed_changed,
+        paradise_force_redraw,
+	paradise_pvga1a_config
+};
+
+const device_t paradise_pvga1a_onboard_device =
+{
+        "Paradise PVGA1A On-Board",
+        0,
+	PVGA1A,
+        paradise_pvga1a_onboard_init,
         paradise_close,
         NULL,
 	{ NULL },

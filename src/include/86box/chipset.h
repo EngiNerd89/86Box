@@ -148,4 +148,5 @@ extern const device_t	vpc2007_device;
 #if defined(DEV_BRANCH) && defined(USE_OLIVETTI)
 extern const device_t   olivetti_eva_device;
 #endif
+extern const device_t   olivetti_ioc02_device;
 #endif	/*EMU_CHIPSET_H*/

@@ -868,3 +868,98 @@ machine_at_olim300_15_init(const machine_t *model)
     return ret;
 }
 
+//working
+int
+machine_at_olipcs286_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/olivetti_pcs286/pcs286_headland_1.42_LOW.bin",
+				L"roms/machines/olivetti_pcs286/pcs286_headland_1.42_HIGH.bin",
+			   0x000e0000, 131072, 0);
+    
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_ide_init(model);
+    mem_remap_top(384);
+
+    // addr 68-6a
+    // device_add(&addr_debugger_device);
+    //headland + ioc02
+    device_add(&olivetti_ioc02_device);
+
+    device_add(&keyboard_ps2_olivetti_device);
+    device_add(&fdc_at_device);  
+
+    /* should use custom BIOS */
+	if (gfxcard == VID_INTERNAL)
+        device_add(&paradise_pvga1a_onboard_device);
+    
+    return ret;
+}
+
+//working
+int
+machine_at_olipcs286s_init(const machine_t *model)
+{
+    int ret;
+
+    // ret = bios_load_interleaved(L"roms/machines/olivetti_pcs286s/pcs286_TI_2.05_LOW.bin",
+				// L"roms/machines/olivetti_pcs286s/pcs286_TI_2.05_HIGH.bin",
+			//    0x000e0000, 131072, 0);
+    
+    ret = bios_load_interleaved(L"roms/machines/olivetti_pcs286s/oli_pcs286s-L",
+				L"roms/machines/olivetti_pcs286s/oli_pcs286s-H",
+			   0x000e0000, 131072, 0);
+    
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_ide_init(model);
+    mem_remap_top(384);
+
+    // ti + olimcu16
+
+    // addr 68-6a
+    device_add(&addr_debugger_device);
+
+    device_add(&keyboard_ps2_olivetti_device);
+    device_add(&fdc_at_device);  
+
+    /* should use custom BIOS */
+	if (gfxcard == VID_INTERNAL)
+        device_add(&paradise_pvga1a_onboard_device);
+    
+    return ret;
+}
+
+
+//unrecoverable error, extended setup hangs
+int
+machine_at_olipcs386sx_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/olivetti_pcs386sx/oli_pcs386sx-low.bin",
+				L"roms/machines/olivetti_pcs386sx/oli_pcs386sx-high.bin",
+			   0x000e0000, 131072, 0);
+    
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_ide_init(model);
+
+    //ports 68 6a
+    //device_add(&addr_debugger_device);
+    device_add(&olivetti_ioc02_device);
+
+    // machine_at_headland_common_init(1);
+
+    device_add(&keyboard_ps2_olivetti_device);
+    device_add(&fdc_at_device);  
+
+    return ret;
+}
+
