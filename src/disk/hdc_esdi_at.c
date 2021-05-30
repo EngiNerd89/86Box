@@ -73,6 +73,7 @@
 #define CMD_SET_PARAMETERS	0x91
 #define CMD_READ_PARAMETERS	0xec
 
+//#define ENABLE_ESDI_AT_LOG 1
 
 typedef struct {
     int		cfg_spt;
@@ -101,7 +102,11 @@ typedef struct {
     pc_timer_t	callback_timer;
 
     drive_t	drives[2];
-
+	uint16_t	base;			/* controller configuration */
+    int8_t	irq;
+    uint32_t	bios_addr,
+		bios_size;
+    
     rom_t	bios_rom;
 } esdi_t;
 
@@ -134,7 +139,7 @@ static __inline void
 irq_raise(esdi_t *esdi)
 {
     if (!(esdi->fdisk & 2))
-	picint(1 << 14);
+	picint(1 << esdi->irq);
 
     esdi->irqstat = 1;
 }
@@ -143,7 +148,7 @@ irq_raise(esdi_t *esdi)
 static __inline void
 irq_lower(esdi_t *esdi)
 {
-    picintc(1 << 14);
+    picintc(1 << esdi->irq);
 }
 
 
@@ -151,7 +156,7 @@ static __inline void
 irq_update(esdi_t *esdi)
 {
     if (esdi->irqstat && !((pic2.irr | pic2.isr) & 0x40) && !(esdi->fdisk & 2))
-	picint(1 << 14);
+	picint(1 << esdi->irq);
 }
 
 
@@ -221,9 +226,11 @@ esdi_writew(uint16_t port, uint16_t val, void *priv)
 {
     esdi_t *esdi = (esdi_t *)priv;
 
-    if (port > 0x01f0) {
+	uint16_t addr = port - esdi->base;
+
+    if (addr > 0) {
 	esdi_write(port, val & 0xff, priv);
-	if (port != 0x01f7)
+	if (addr != 7)
 		esdi_write(port + 1, (val >> 8) & 0xff, priv);
     } else {
 	esdi->buffer[esdi->pos >> 1] = val;
@@ -246,32 +253,34 @@ esdi_write(uint16_t port, uint8_t val, void *priv)
 
     esdi_at_log("WD1007 write(%04x, %02x)\n", port, val);
 
-    switch (port) {
-	case 0x1f0:	/* data */
+	uint16_t addr = port - esdi->base;
+
+    switch (addr) {
+	case 0:	/* data */
 		esdi_writew(port, val | (val << 8), priv);
 		return;
 
-	case 0x1f1:	/* write precompensation */
+	case 1:	/* write precompensation */
 		esdi->cylprecomp = val;
 		return;
 
-	case 0x1f2:	/* sector count */
+	case 2:	/* sector count */
 		esdi->secount = val;
 		return;
 
-	case 0x1f3:	/* sector */
+	case 3:	/* sector */
 		esdi->sector = val;
 		return;
 
-	case 0x1f4:	/* cylinder low */
+	case 4:	/* cylinder low */
 		esdi->cylinder = (esdi->cylinder & 0xFF00) | val;
 		return;
 
-	case 0x1f5:	/* cylinder high */
+	case 5:	/* cylinder high */
 		esdi->cylinder = (esdi->cylinder & 0xFF) | (val << 8);
 		return;
 
-	case 0x1f6: /* drive/Head */
+	case 6: /* drive/Head */
 		esdi->head = val & 0xF;
 		esdi->drive_sel = (val & 0x10) ? 1 : 0;
 		if (esdi->drives[esdi->drive_sel].present)
@@ -280,7 +289,7 @@ esdi_write(uint16_t port, uint8_t val, void *priv)
 			esdi->status = 0;
 		return;
 
-	case 0x1f7:	/* command register */
+	case 7:	/* command register */
 		irq_lower(esdi);
 		esdi->command = val;
 		esdi->error = 0;
@@ -371,7 +380,7 @@ esdi_write(uint16_t port, uint8_t val, void *priv)
 		}
 		break;
 
-	case 0x3f6: /* Device control */
+	case 0x206: /* Device control */
 		if ((esdi->fdisk & 0x04) && !(val & 0x04)) {
                         timer_set_delay_u64(&esdi->callback_timer, 500 * HDC_TIME);
 			esdi->reset = 1;
@@ -396,9 +405,11 @@ esdi_readw(uint16_t port, void *priv)
     esdi_t *esdi = (esdi_t *)priv;
     uint16_t temp;
 
-    if (port > 0x01f0) {
+	uint16_t addr = port - esdi->base;
+
+    if (addr > 0) {
 	temp = esdi_read(port, priv);
-	if (port == 0x01f7)
+	if (addr == 7)
 		temp |= 0xff00;
 	else
 		temp |= (esdi_read(port + 1, priv) << 8);
@@ -432,36 +443,38 @@ esdi_read(uint16_t port, void *priv)
     esdi_t *esdi = (esdi_t *)priv;
     uint8_t temp = 0xff;
 
-    switch (port) {
-	case 0x1f0:	/* data */
+	uint16_t addr = port - esdi->base;
+
+    switch (addr) {
+	case 0:	/* data */
 		temp = esdi_readw(port, esdi) & 0xff;
 		break;
 
-	case 0x1f1:	/* error */
+	case 1:	/* error */
 		temp = esdi->error;
 		break;
 
-	case 0x1f2:	/* sector count */
+	case 2:	/* sector count */
 		temp = esdi->secount;
 		break;
 
-	case 0x1f3:	/* sector */
+	case 3:	/* sector */
 		temp = esdi->sector;
 		break;
 
-	case 0x1f4:	/* cylinder low */
+	case 4:	/* cylinder low */
 		temp = (uint8_t) (esdi->cylinder&0xff);
 		break;
 
-	case 0x1f5:	/* cylinder high */
+	case 5:	/* cylinder high */
 		temp = (uint8_t) (esdi->cylinder>>8);
 		break;
 
-	case 0x1f6:	/* drive/Head */
+	case 6:	/* drive/Head */
 		temp = (uint8_t) (esdi->head | (esdi->drive_sel ? 0x10 : 0) | 0xa0);
 		break;
 
-	case 0x1f7:	/* status */
+	case 7:	/* status */
 		irq_lower(esdi);
 		temp = esdi->status;
 		break;
@@ -793,21 +806,27 @@ wd1007vse1_init(const device_t *info)
 
     esdi->status = STAT_READY|STAT_DSC;
     esdi->error = 1;
+	esdi->base = device_get_config_hex16("base");
+	esdi->irq = device_get_config_int("irq");
+	esdi->bios_addr = device_get_config_hex20("bios_addr");
+	esdi->bios_size = 0x4000;
 
-    rom_init(&esdi->bios_rom,
-	     BIOS_FILE, 0xc8000, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
+    if (esdi->bios_addr){
+		rom_init(&esdi->bios_rom,
+	    	BIOS_FILE, esdi->bios_addr, esdi->bios_size, esdi->bios_size - 1, 0, MEM_MAPPING_EXTERNAL);
 
-    mem_mapping_set_handler(&esdi->bios_rom.mapping,
-			    rom_read, rom_readw, rom_readl,
-			    esdi_rom_write, NULL, NULL);
+    	mem_mapping_set_handler(&esdi->bios_rom.mapping,
+		    rom_read, rom_readw, rom_readl,
+		    esdi_rom_write, NULL, NULL);
+	}
 
-    io_sethandler(0x01f0, 1,
+    io_sethandler(esdi->base, 1,
 		  esdi_read, esdi_readw, NULL,
 		  esdi_write, esdi_writew, NULL, esdi);
-    io_sethandler(0x01f1, 7,
+    io_sethandler(esdi->base + 1, 7,
 		  esdi_read, esdi_readw, NULL,
 		  esdi_write, esdi_writew, NULL, esdi);
-    io_sethandler(0x03f6, 1, NULL, NULL, NULL,
+    io_sethandler(esdi->base + 0x0206, 1, NULL, NULL, NULL,
 		  esdi_write, NULL, NULL, esdi);
 
     timer_add(&esdi->callback_timer, esdi_callback, esdi, 0);
@@ -843,6 +862,56 @@ wd1007vse1_available(void)
     return(rom_present(BIOS_FILE));
 }
 
+static const device_config_t wd_esdi_config[] = {
+    {
+	"bios_addr", "BIOS address", CONFIG_HEX20, "", 0xc8000, "", { 0 },
+	{
+		{
+			"Disabled", 0x00000
+		},
+		{
+			"C800H", 0xc8000
+		},
+		{
+			"CC00H", 0xcc000
+		},
+		{
+			""
+		}
+	}
+    },
+    {
+	"base", "Address", CONFIG_HEX16, "", 0x01f0, "", { 0 },
+	{
+		{
+			"1f0H", 0x01f0
+		},
+		{
+			"170H", 0x0170
+		},
+		{
+			""
+		}
+	}
+    },
+    {
+	"irq", "IRQ", CONFIG_SELECTION, "", 14, "", { 0 },
+	{
+		{
+			"IRQ 14", 14
+		},
+		{
+			"IRQ 15", 15
+		},
+		{
+			""
+		}
+	}
+    },
+    {
+	"", "", -1
+    }
+};
 
 const device_t esdi_at_wd1007vse1_device = {
     "Western Digital WD1007V-SE1 (ESDI)",
@@ -851,5 +920,5 @@ const device_t esdi_at_wd1007vse1_device = {
     wd1007vse1_init, wd1007vse1_close, NULL,
     { wd1007vse1_available },
     NULL, NULL,
-    NULL
+    wd_esdi_config
 };
