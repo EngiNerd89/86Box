@@ -1224,3 +1224,61 @@ machine_at_ficpa2012_init(const machine_t *model)
 
     return ret;
 }
+
+const device_t *
+at_acd8000_get_device(void)
+{
+    return &s3_phoenix_trio64_onboard_pci_device;
+}
+
+
+//cmd640 ide controller not working, isa ide controller works
+int
+machine_at_acd8000_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_acd8000/ACD8000.ROM",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_sp4_common_init(model);
+
+    //device_add(&addr_debugger_device);
+    
+    if (gfxcard == VID_INTERNAL)
+	    device_add(&s3_phoenix_trio64_onboard_pci_device);
+
+    return ret;
+}
+
+
+const device_t *
+at_acd8600_get_device(void)
+{
+    return &s3_phoenix_trio64vplus_onboard_pci_device;
+}
+
+
+//cmd640 ide controller not working, isa ide controller works
+int
+machine_at_acd8600_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_acd8600/ACD8000X.ROM",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_sp4_common_init(model);
+
+    if (gfxcard == VID_INTERNAL)
+	    device_add(&s3_phoenix_trio64vplus_onboard_pci_device);
+
+    return ret;
+}
+

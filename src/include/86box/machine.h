@@ -664,5 +664,15 @@ extern int	machine_xt_xi8088_init(const machine_t *);
 extern const device_t	*xi8088_get_device(void);
 #endif
 
+/* Incomplete machines */
+
+
+// socket 5
+extern int	machine_at_acd8000_init(const machine_t *);
+extern int	machine_at_acd8600_init(const machine_t *);
+#ifdef EMU_DEVICE_H
+extern const device_t	*at_acd8000_get_device(void);
+extern const device_t	*at_acd8600_get_device(void);
+#endif
 
 #endif	/*EMU_MACHINE_H*/

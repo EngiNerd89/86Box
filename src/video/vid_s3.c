@@ -73,6 +73,7 @@ enum
 	S3_METHEUS_86C928,
 	S3_AMI_86C924,
 	S3_TRIO64V2_DX,
+	S3_PHOENIX_TRIO64V2_DX_ONBOARD,
 	S3_PHOENIX_TRIO64VPLUS,
 	S3_PHOENIX_TRIO64VPLUS_ONBOARD,
 	S3_DIAMOND_STEALTH_SE,
@@ -5690,6 +5691,11 @@ static void *s3_init(const device_t *info)
 			chip = S3_TRIO64V2;
 			video_inform(VIDEO_FLAG_TYPE_SPECIAL, &timing_s3_trio64_pci);
 			break;
+		case S3_PHOENIX_TRIO64V2_DX_ONBOARD:
+			bios_fn = NULL;
+			chip = S3_TRIO64V2;
+			video_inform(VIDEO_FLAG_TYPE_SPECIAL, &timing_s3_trio64_pci);
+			break;
 		default:
 			free(s3);
 			return NULL;
@@ -5997,6 +6003,7 @@ static void *s3_init(const device_t *info)
 		case S3_PHOENIX_TRIO64_ONBOARD:
 		case S3_PHOENIX_TRIO64VPLUS:
 		case S3_PHOENIX_TRIO64VPLUS_ONBOARD:
+		case S3_PHOENIX_TRIO64V2_DX_ONBOARD:
 		case S3_DIAMOND_STEALTH64_764:
 			if (device_get_config_int("memory") == 1)
 				s3->svga.vram_max = 1 << 20;	/* Phoenix BIOS does not expect VRAM to be mirrored. */
@@ -6238,6 +6245,27 @@ static const device_config_t s3_standard_config[] =
 			},
 			{
 				"4 MB", 4
+			},
+			{
+				""
+			}
+		}
+	},
+	{
+		"", "", -1
+	}
+};
+
+static const device_config_t s3_phoenix_trio64v2_dx_onboard_config[] =
+{
+	{
+		"memory", "Video memory size", CONFIG_SELECTION, "", 4, "", { 0 },
+		{
+			{
+				"1 MB", 1
+			},
+			{
+				"2 MB", 2
 			},
 			{
 				""
@@ -6756,15 +6784,29 @@ const device_t s3_elsa_winner2000_pro_x_vlb_device =
 
 const device_t s3_trio64v2_dx_pci_device =
 {
-        "S3 Trio64V2/DX PCI",
-        DEVICE_PCI,
-        S3_TRIO64V2_DX,
-        s3_init,
-        s3_close,
+	"S3 Trio64V2/DX PCI",
+	DEVICE_PCI,
+	S3_TRIO64V2_DX,
+	s3_init,
+	s3_close,
 	NULL,
-        { s3_trio64v2_dx_available },
-        s3_speed_changed,
-        s3_force_redraw,
-        s3_standard_config
+	{ s3_trio64v2_dx_available },
+	s3_speed_changed,
+	s3_force_redraw,
+	s3_standard_config
+};
+
+const device_t s3_phoenix_trio64v2_dx_onboard_pci_device =
+{
+	"Phoenix S3 Trio64V2/DX On-Board PCI",
+	DEVICE_PCI,
+	S3_PHOENIX_TRIO64V2_DX_ONBOARD,
+	s3_init,
+	s3_close,
+	NULL,
+	{ NULL },
+	s3_speed_changed,
+	s3_force_redraw,
+	s3_phoenix_trio64v2_dx_onboard_config
 };
 
