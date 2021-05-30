@@ -436,6 +436,8 @@ const machine_t machines[] = {
     /* Miscellaneous/Fake/Hypervisor machines */
     { "[i440BX] Microsoft Virtual PC 2007",	"vpc2007",		MACHINE_TYPE_MISC,		CPU_PKG_SLOT1, CPU_BLOCK(CPU_PENTIUM2, CPU_CYRIX3S), 0, 0, 0, 0, 0, 0,						MACHINE_AGP | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,		  		 8192,1048576, 8192, 255,	      machine_at_vpc2007_init, NULL			},
 
+    { "[ISA] EPSON EL2+",			"epson_el2plus",		MACHINE_TYPE_286,		CPU_PKG_286, 0, 8000000, 10000000, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE,	    1024, 16384, 1024, 127,		 machine_at_epson_el2plus_init, NULL			},
+    { "[ISA] EPSON EL3s+",			"epson_el3splus",		MACHINE_TYPE_386SX,		CPU_PKG_386SX, 0, 16000000, 16000000, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE,				1024, 16384, 1024, 127,		 machine_at_epson_el3splus_init, NULL			},
     { NULL,					NULL,			MACHINE_TYPE_NONE,		0, 0, 0, 0, 0, 0, 0, 0,												0,										    0,      0,    0,   0,			         NULL, NULL			}
 };
 

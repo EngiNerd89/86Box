@@ -868,3 +868,55 @@ machine_at_olim300_15_init(const machine_t *model)
     return ret;
 }
 
+
+//not working (post code 1d 1c) -> works with debugger
+int
+machine_at_epson_el2plus_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/epson_el2plus/M2P_123.1-2",
+				L"roms/machines/epson_el2plus/M2P_123.2-2",
+				0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //found e5-e7
+    device_add(&epson_e01243nc_device);
+
+    
+    //video should be wd90c11
+
+    return ret;
+}
+
+//not working (bios post code 1d 1c) -> works with debugger
+int
+machine_at_epson_el3splus_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_el3splus/EL3P",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //found e5-e7
+    device_add(&epson_e01243nc_device);
+
+
+    //video is wd90c11
+    
+    return ret;
+}
+
