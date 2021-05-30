@@ -827,3 +827,41 @@ machine_xt_olim19_init(const machine_t *model)
     return ret;
 
 }
+
+//lacking dma and timer emulation
+//nec v40 should embed those inside cpu package
+int
+machine_xt_pc1_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/olivetti_pc1/PC1_BIOS_1_21.BIN",
+			   0x000fc000, 16384, 0);
+
+	
+	// XU4600_PC1_PRODEST_FONT101.BIN
+
+    if (bios_only || !ret)
+	 return ret;
+
+	//olim24_kbd_t *m24_kbd;
+
+    //m24_kbd = (olim24_kbd_t *)malloc(sizeof(olim24_kbd_t));
+    //memset(m24_kbd, 0x00, sizeof(olim24_kbd_t));
+
+    machine_common_init(model);
+    device_add(&fdc_at_device);
+
+	//keyboard must be at or m24 protocol-compatible
+	device_add(&keyboard_at_device);
+	//m24_kbd_init(m24_kbd);
+	//device_add_ex(&m24_kbd_device, m24_kbd);
+	
+	device_add(&cga_device);
+	
+	nmi_init();
+
+    return ret;
+
+}
+

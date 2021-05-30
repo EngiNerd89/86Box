@@ -436,6 +436,37 @@ const machine_t machines[] = {
     /* Miscellaneous/Fake/Hypervisor machines */
     { "[i440BX] Microsoft Virtual PC 2007",	"vpc2007",		MACHINE_TYPE_MISC,		CPU_PKG_SLOT1, CPU_BLOCK(CPU_PENTIUM2, CPU_CYRIX3S), 0, 0, 0, 0, 0, 0,						MACHINE_AGP | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,		  		 8192,1048576, 8192, 255,	      machine_at_vpc2007_init, NULL			},
 
+    /* Incomplete machines */
+    // 8088
+    { "[8088] Olivetti Prodest PC1",		"olivetti_pc1",			MACHINE_TYPE_8088,		CPU_PKG_8088, 0, 0, 0, 0, 0, 0, 0,                               MACHINE_PC | MACHINE_VIDEO_FIXED,					 256,  640,  256,   0,		 machine_xt_pc1_init, NULL			},
+    { "[8088] HeadStart LX",	        "headstart_lx",	MACHINE_TYPE_8088,		CPU_PKG_8088, 0, 0, 0, 0, 0, 0, 0,										MACHINE_PC | MACHINE_XTA,									   256,  1024,  128,   0,		machine_xt_headstart_lx_init, NULL			},
+    // 286
+    { "[ISA] Philips PCD-200 Series",		"pcd200",		MACHINE_TYPE_286,		CPU_PKG_286, 0, 0, 0, 0, 0, 0, 0,                                   MACHINE_AT | MACHINE_VIDEO,									512,16384, 128, 127,		machine_at_pcd200_init, NULL			},
+    // 386SX
+    { "[ISA] EPSON PC-AX3s/25",			"epson_ax3s_25",		MACHINE_TYPE_386SX,		CPU_PKG_386SX, 0, 0, 0, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE,				1024, 16384, 256, 127,		 machine_at_epson_ax3s_25_init, NULL			},
+    { "[ISA] EPSON NB3s",			"epson_nb3s",		MACHINE_TYPE_386SX,		CPU_PKG_386SX, 0, 16000000, 16000000, 0, 0, 0, 0,                     MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO,				1024, 5120, 1024, 127,		 machine_at_epson_nb3s_init, NULL			},
+    // 386DX
+    { "[ISA] Olivetti M380-40",		"olivetti_m380_40",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 0, 0, 0, 0, 0, 0,										MACHINE_AT,									  512,  8192,  128, 127,	 machine_at_olim380_40_init, NULL			},
+    { "[ISA] EPSON PC-AX3/25",		"epson_ax3_25",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 25000000, 25000000, 0, 0, 0, 0,										MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE,				  2048,  16384,  1024, 127,	 machine_at_epson_ax3_25_init, NULL			},
+    // 486
+    { "[UMC 491] Olivetti M4-4xx Enhanced",	"olivetti_m4_4xxenh",		MACHINE_TYPE_486,		CPU_PKG_SOCKET1, 0, 0, 0, 0, 0, 0, 0,                       MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL | MACHINE_VIDEO,					4096,   36864,   2048, 127,	  machine_at_olim4_4xxenh_init, NULL			},
+    { "[VLSI 82C483] AST Bravo LC4",	"bravolc4",		MACHINE_TYPE_486,		CPU_PKG_SOCKET1, 0, 0, 0, 0, 0, 0, 0,                       MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO,						4096,   36864,   2048, 127,	  machine_at_bravolc4_init, NULL			},
+    { "[VLSI 82C483] Compaq Prolinea 4",	"prolinea4",		MACHINE_TYPE_486,		CPU_PKG_SOCKET1, 0, 0, 0, 0, 0, 0, 0,                       MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO,						4096,   36864,   2048, 127,	  machine_at_prolinea4_init, NULL			},
+    { "[ISA] EPSON PC-AX4",		"epson_ax4",		MACHINE_TYPE_486,		CPU_PKG_SOCKET1, 0, 0, 0, 0, 0, 0, 0,										MACHINE_AT,									  1024,  65536,  256, 127,	 machine_at_epson_ax4_init, NULL			},
+    // socket 5
+    { "[i430NX] Siemens Nixdorf D842",		"snid842",		MACHINE_TYPE_SOCKET5,		CPU_PKG_SOCKET5_7, 0, 60000000, 66666667, 3520, 3520, 1.5, 1.5,         		    MACHINE_PCI | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,				  2048,  131072,   2048, 127,		machine_at_snid842_init, NULL			},
+    // socket 7
+    { "[i430FX] Olivetti M4 Pxx (Romolo)",	"olivetti_m4_romolo",		MACHINE_TYPE_SOCKET7_3V,	CPU_PKG_SOCKET5_7, 0, 50000000, 66666667, 3380, 3520, 1.5, 3.0,		    MACHINE_PCI | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,				  8192,  131072,   8192, 127,	        machine_at_olim4_romolo_init, NULL			},
+    { "[i430FX] Olivetti M4 Pxx (Milano)",	"olivetti_m4_milano",		MACHINE_TYPE_SOCKET7_3V,	CPU_PKG_SOCKET5_7, 0, 50000000, 66666667, 3380, 3520, 1.5, 3.0,		    MACHINE_PCI | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,				  8192,  131072,   8192, 127,	        machine_at_olim4_milano_init, NULL			},
+    { "[i430FX] Intel Advanced/AS",		"atlantis",		MACHINE_TYPE_SOCKET7_3V,	CPU_PKG_SOCKET5_7, 0, 50000000, 66666667, 3380, 3520, 1.5, 3.0,				    MACHINE_PCI | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL | MACHINE_VIDEO,		  8192,  131072,   8192, 127,	      machine_at_atlantis_init, NULL			},
+    { "[i430HX] HP Vectra VL 5 Series 5",	"vectra55",		MACHINE_TYPE_SOCKET7,		CPU_PKG_SOCKET5_7, 0, 50000000, 66666667, 2500, 3520, 1.5, 3.0,                     MACHINE_PCI | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL | MACHINE_VIDEO,	  8,  192,   8, 511,	     machine_at_vectra55_init, NULL		},
+    { "[i430TX] Dell Optiplex Gn",			"optiplexgn",		MACHINE_TYPE_SOCKET7,		CPU_PKG_SOCKET5_7, 0, 50000000, 66666667, 2100, 3520, 1.5, 3.0, 			    MACHINE_PCI | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL | MACHINE_VIDEO,				  8192,  262144,   8192, 255,	      machine_at_optiplexgn_init, NULL			},
+    // socket 8
+    { "[i440FX] Siemens Nixdorf D983",		"snid983",			MACHINE_TYPE_SOCKET8,		CPU_PKG_SLOT1, 0, 60000000, 83333333, 1800, 3500, 2.0, 5.5,         MACHINE_PCI | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,				  8,  768,   8, 127,	         machine_at_snid983_init, NULL			},
+    // slot 1 
+    { "[i440FX] IBM PC 300XL",	"pc300xl",		MACHINE_TYPE_SLOT1,		CPU_PKG_SLOT1, 0, 60000000, 83333333, 1800, 3500, 2.0, 5.5,                             MACHINE_PCI | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,				  8, 384,   8, 127,	 machine_at_pc300xl_init, NULL			},
+    { "[i440BX] Compaq Deskpro EP/SB",	"deskpro686t2",		MACHINE_TYPE_SLOT1,		CPU_PKG_SLOT1, 0, 66666667, 100000000, 1800, 3500, 3.0, 8.0,                        MACHINE_AGP | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,		  		  8,  768,   8, 255,	        machine_at_deskpro686t2_init, NULL			},
+
     { NULL,					NULL,			MACHINE_TYPE_NONE,		0, 0, 0, 0, 0, 0, 0, 0,												0,										    0,      0,    0,   0,			         NULL, NULL			}
 };
 

@@ -640,6 +640,8 @@ extern int	machine_xt_lxt3_init(const machine_t *);
 /* m_xt_philips.c */
 extern int	machine_xt_p3105_init(const machine_t *);
 extern int	machine_xt_p3120_init(const machine_t *);
+extern int	machine_xt_headstart_lx_init(const machine_t *);
+
 /* m_xt_t1000.c */
 extern int	machine_xt_t1000_init(const machine_t *);
 extern int	machine_xt_t1200_init(const machine_t *);
@@ -663,6 +665,45 @@ extern int	machine_xt_xi8088_init(const machine_t *);
 #ifdef EMU_DEVICE_H
 extern const device_t	*xi8088_get_device(void);
 #endif
+
+/* Incomplete machines */
+
+extern int	machine_xt_olim15_init(const machine_t *);
+
+// 286
+extern int	machine_at_pcd200_init(const machine_t *);
+
+// 386SX
+extern int	machine_at_epson_ax3s_25_init(const machine_t *);
+extern int	machine_at_epson_nb3s_init(const machine_t *);
+
+// 386DX
+extern int  machine_at_epson_ax3_25_init(const machine_t *);
+
+extern int  machine_at_olim380_40_init(const machine_t *);
+
+//486
+extern int  machine_at_olim4_4xxenh_init(const machine_t *);
+extern int  machine_at_epson_ax4_init(const machine_t *);
+extern int  machine_at_bravolc4_init(const machine_t *);
+extern int	machine_at_prolinea4_init(const machine_t *);
+
+// socket 4
+extern int	machine_at_snid842_init(const machine_t *);
+
+// socket 5
+extern int  machine_at_olim4_romolo_init(const machine_t *);
+extern int  machine_at_olim4_milano_init(const machine_t *);
+// socket 7
+extern int  machine_at_optiplexgn_init(const machine_t *);
+extern int  machine_at_atlantis_init(const machine_t *);
+extern int	machine_at_vectra55_init(const machine_t *);
+
+// socket 8
+extern int	machine_at_snid983_init(const machine_t *);
+// slot1
+extern int  machine_at_pc300xl_init(const machine_t *);
+extern int  machine_at_deskpro686t2_init(const machine_t *);
 
 
 #endif	/*EMU_MACHINE_H*/

@@ -868,3 +868,79 @@ machine_at_olim300_15_init(const machine_t *model)
     return ret;
 }
 
+//must identify chipset, 16mb memory always detected, AMI bios, AVGA2
+//bios supports shadowing and ems
+int
+machine_at_epson_ax3s_25_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_ax3s_25/081192.BIN",
+			   0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //found 92h, 390-391
+    device_add(&addr_debugger_device);
+
+    
+    return ret;
+}
+
+//not working (bios post code 02 01)
+int
+machine_at_epson_nb3s_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/epson_nb3s/NB3S",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //found ec-ed-f5-f9-fb-120-170-171
+    device_add(&addr_debugger_device);
+    
+    if (gfxcard == VID_INTERNAL)
+        device_add(&vga_device);
+    
+    return ret;
+}
+
+//not working, requires faraday chipset
+int
+machine_at_pcd200_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/pcd200/u67_mi212_r1.00.01.bin",
+				L"roms/machines/pcd200/u66_mi212_r1.00.01.bin",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+
+    //found f1, keep searching
+    device_add(&addr_debugger_device);
+
+    device_add(&keyboard_ps2_device);
+    
+    device_add(&fdc_at_device);
+
+    if (gfxcard == VID_INTERNAL)
+    	device_add(&paradise_pvga1a_device);
+    
+    return ret;
+}

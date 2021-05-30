@@ -652,3 +652,92 @@ machine_at_vei8_init(const machine_t *model)
 
     return ret;
 }
+
+// Broken: either hangs or reboots before "Press F10" message
+int
+machine_at_deskpro686t2_init(const machine_t *model)
+{
+    int ret;
+
+    // T2 (sp13740.exe)
+    ret = bios_load_linear(L"roms/machines/deskpro686t2/TRIGGRC0.BIN",
+			   0x000c0000, 262144, 0);
+    // T1 (sp13758.exe)
+    //ret = bios_load_linear(L"roms/machines/deskpro686t2/TRIGGRC0.BIN",
+	//		   0x000c0000, 262144, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init_ex(model, 2);
+    
+    // Note: southbridge should be at address 20, however if set so display disappears
+    pci_register_slot(0x00, PCI_CARD_NORTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x14, PCI_CARD_SOUTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x0D, PCI_CARD_NORMAL,      1, 2, 3, 4);
+    pci_register_slot(0x0E, PCI_CARD_NORMAL,      4, 1, 2, 3);
+    pci_register_slot(0x0F, PCI_CARD_NORMAL,      3, 4, 1, 2);
+    pci_register_slot(0x10, PCI_CARD_NORMAL,      2, 3, 4, 1);
+    // USB interface
+    pci_register_slot(0x07, PCI_CARD_NORMAL,      0, 0, 0, 4);
+    // AGP slot (should be on bus 1)
+    pci_register_slot(0x01, PCI_CARD_AGPBRIDGE,     0, 0, 1, 2);
+    // T2
+    device_add(&i440bx_device);
+    // T1
+    //device_add(&i440ex_device);
+    device_add(&piix4e_device);
+
+    device_add(&pc87309_15c_device);
+    device_add(&keyboard_ps2_ami_pci_device);
+    device_add(&intel_flash_bxt_device);
+    //spd_register(SPD_TYPE_SDRAM, 0x7, 256);
+    return ret;
+}
+
+// Broken: plays only a strange chime (undocumented in IBM service manual) on boot
+int
+machine_at_pc300xl_init(const machine_t *model)
+{
+    int ret;
+
+    // nejt17a.exe
+    ret = bios_load_linear_combined2(L"roms/machines/pc300xl/1017DU0M.bio",
+				     L"roms/machines/pc300xl/1017DU0M.bi1",
+				     L"roms/machines/pc300xl/1017DU0M.bi2",
+				     L"roms/machines/pc300xl/1017DU0M.bi3",
+				     L"roms/machines/pc300xl/1017DU0M.rcv",
+				     0x3a000, 128);
+
+    /*
+    ret = bios_load_linear_combined2(L"roms/machines/pc300xl/BIOSDU0.rec",
+				     L"roms/machines/pc300xl/BIOSDU0.re1",
+				     L"roms/machines/pc300xl/BIOSDU0.re2",
+				     L"roms/machines/pc300xl/BIOSDU0.re3",
+				     L"roms/machines/pc300xl/1017DU0M.rcv",
+				     0x3a000, 128);
+    */
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init(model);
+
+    pci_init(PCI_CONFIG_TYPE_1);
+    pci_register_slot(0x00, PCI_CARD_NORTHBRIDGE, 0, 0, 0, 0);
+    //pci_register_slot(0x08, PCI_CARD_ONBOARD, 3, 0, 0, 0);
+    pci_register_slot(0x11, PCI_CARD_NORMAL, 1, 3, 2, 4);
+    //pci_register_slot(0x13, PCI_CARD_NORMAL, 2, 1, 3, 4);
+    //pci_register_slot(0x0B, PCI_CARD_NORMAL, 3, 2, 1, 4);
+    pci_register_slot(0x07, PCI_CARD_SOUTHBRIDGE, 0, 0, 0, 0);
+    device_add(&i440fx_device);
+    device_add(&piix3_device);
+    //device_add(&keyboard_ps2_intel_ami_pci_device);
+    device_add(&keyboard_ps2_ami_pci_device);
+    device_add(&pc87307_device);
+
+    device_add(&intel_flash_bxt_ami_device);
+
+    return ret;
+}
+

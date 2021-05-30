@@ -201,3 +201,24 @@ machine_xt_p3120_init(const machine_t *model)
     return ret;
 }
 
+//not working, gives continuous beep
+//mainboard is identical to P3120
+int
+machine_xt_headstart_lx_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/headstart_lx/philipsxt.bin",
+			   0x000f8000, 32768, 0);
+    
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_xt_philips_common_init(model);
+    
+    device_add(&gc100a_device);
+    
+    device_add(&addr_debugger_device);
+    
+    return ret;
+}

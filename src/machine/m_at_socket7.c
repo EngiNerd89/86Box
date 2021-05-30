@@ -1224,3 +1224,264 @@ machine_at_ficpa2012_init(const machine_t *model)
 
     return ret;
 }
+
+// Broken: integrated graphics card not working (cannot find video BIOS?)
+// MMX CPU and warm reboot produce RTC errors
+// Keyboard fuse is reported to be blown, even though keyboard works
+int
+machine_at_optiplexgn_init(const machine_t *model)
+{
+    int ret;
+
+    // Gn_A12.exe
+    ret = bios_load_linear(L"roms/machines/optiplexgn/GN_A12.ROM",
+			   0x000c0000, 262144, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init_ex(model, 2);
+
+    pci_init(PCI_CONFIG_TYPE_1);
+    // TODO: find a way to check for those parameters: DELL manuals do not specify anything
+    pci_register_slot(0x00, PCI_CARD_NORTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x0C, PCI_CARD_NORMAL, 1, 2, 3, 4);
+    pci_register_slot(0x0B, PCI_CARD_NORMAL, 2, 3, 4, 1);
+    pci_register_slot(0x0A, PCI_CARD_NORMAL, 3, 4, 1, 2);
+    pci_register_slot(0x09, PCI_CARD_NORMAL, 4, 1, 2, 3);
+    pci_register_slot(0x0F, PCI_CARD_SOUTHBRIDGE, 1, 2, 3, 4);	/* PIIX4 */
+    pci_register_slot(0x0D, PCI_CARD_VIDEO, 1, 2, 3, 4);
+    pci_register_slot(0x08, PCI_CARD_NORMAL, 2, 3, 4, 1);
+
+    device_add(&i430tx_device);
+    device_add(&piix4_device);
+    device_add(&keyboard_ps2_pci_device);
+    //device_add(&w83977tf_device);
+    //device_add(&pc87306_device);
+    device_add(&intel_flash_bxt_device);
+    //device_add(&sst_flash_29ee020_device);
+
+    device_add(&addr_debugger_device);
+
+    if (gfxcard == VID_INTERNAL)
+	    device_add(&s3_phoenix_trio64v2_dx_onboard_pci_device);
+    
+    return ret;
+}
+
+static uint8_t
+m4_read(uint16_t port, void *priv)
+{
+    switch (port) {
+    case 0x69:
+        return(0x00);
+    }
+    return (0xff);
+}
+
+// Missing Trident 9680 onboard video
+// Diagnostics fail for TLB, coprocessor and clock calendar
+// 20b-20f-213-217-21b-21f-223-227 jumpers??
+int
+machine_at_olim4_romolo_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/olivetti_m4_romolo/AMIBOOT.ROM",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init(model);
+    
+    pci_init(PCI_CONFIG_TYPE_1);
+    pci_register_slot(0x00, PCI_CARD_NORTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x07, PCI_CARD_SOUTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x0C, PCI_CARD_NORMAL, 1, 2, 3, 4);
+    pci_register_slot(0x0B, PCI_CARD_NORMAL, 2, 3, 4, 1);
+    pci_register_slot(0x0A, PCI_CARD_NORMAL, 3, 4, 1, 2);
+    pci_register_slot(0x09, PCI_CARD_NORMAL, 4, 1, 2, 3);
+	
+    device_add(&i430fx_device);
+    device_add(&piix_device);
+    device_add(&keyboard_ps2_intel_ami_pci_device);
+    device_add(&fdc37c665_device);
+    device_add(&intel_flash_bxt_device);
+
+    io_sethandler(0x4d0, 2, m4_read, NULL, NULL, NULL, NULL, NULL, NULL);
+
+    return ret;
+}
+
+// Missing Trident 9680 onboard video
+int
+machine_at_olim4_milano_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/olivetti_m4_milano/MILANO.ROM",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init_ex(model, 2);
+
+    pci_init(PCI_CONFIG_TYPE_1);
+    pci_register_slot(0x00, PCI_CARD_NORTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x07, PCI_CARD_SOUTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x0C, PCI_CARD_NORMAL, 1, 2, 3, 4);
+    pci_register_slot(0x0B, PCI_CARD_NORMAL, 2, 3, 4, 1);
+    pci_register_slot(0x0A, PCI_CARD_NORMAL, 3, 4, 1, 2);
+    pci_register_slot(0x09, PCI_CARD_NORMAL, 4, 1, 2, 3);
+	
+    device_add(&i430fx_device);
+    device_add(&piix_device);
+    device_add(&keyboard_ps2_ami_pci_device);
+    device_add(&fdc37c932qf_device);
+    device_add(&intel_flash_bxt_device);
+
+    return ret;
+}
+
+int
+machine_at_atlantis_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear_combined(L"roms/machines/atlantis/1004CL0_.bio",
+				    L"roms/machines/atlantis/1004CL0_.bi1", 0x20000, 128);
+
+    if (bios_only || !ret)
+	return ret;
+
+    //check if compliant
+    machine_at_common_init_ex(model, 0);
+
+    pci_init(PCI_CONFIG_TYPE_1);
+    pci_register_slot(0x00, PCI_CARD_NORTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x08, PCI_CARD_VIDEO, 4, 0, 0, 0);
+    pci_register_slot(0x0D, PCI_CARD_NORMAL, 1, 2, 3, 4);
+    pci_register_slot(0x0E, PCI_CARD_NORMAL, 2, 3, 4, 1);
+    pci_register_slot(0x0F, PCI_CARD_NORMAL, 3, 4, 2, 1);
+    pci_register_slot(0x10, PCI_CARD_NORMAL, 4, 3, 2, 1);
+    pci_register_slot(0x07, PCI_CARD_SOUTHBRIDGE, 0, 0, 0, 0);
+
+    device_add(&keyboard_ps2_ami_pci_device);
+    device_add(&i430fx_device);
+    device_add(&piix_device);
+    device_add(&pc87306_device);
+    device_add(&intel_flash_bxt_ami_device);
+
+    if (gfxcard == VID_INTERNAL)
+        device_add(&mach64ct_onboard_pci_device);
+
+    //missing CS4232 audio chip
+
+    return ret;
+}
+
+#if defined(DEV_BRANCH) && defined(USE_VECTRA54)
+// Has resources conflict on secondary IDE controller, works if disabled by BIOS (only primary IDE active)
+// CPU clock is incorrectly reported (apparently 1.5 multiplier is treated like 3.0, 2.0 like 2.5)
+int
+machine_at_vectra54_init(const machine_t *model) 
+{
+    int ret;
+
+    /**
+     * Note: there are two BIOS available, depending on the machine model number
+     * Apparently, it makes no difference for the emulator (may be different video BIOS?)
+     * Also note that the BIOS interfaces directly with the southbridge chip (82371Fb)
+    **/
+
+    // vob4z1us.exe
+    /*
+    ret = bios_load_linear(L"roms/machines/vectra54/GT0724.22",
+			   0x000e0000, 131072, 0);
+    */
+    ret = bios_load_linear(L"roms/machines/vectra54/GT0723.23",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init_ex(model, 2);
+
+    pci_init(PCI_CONFIG_TYPE_1);
+    // TODO: Verify if device numbers and irq lines are correct
+    // Unfortunately, HP technical reference manual for Vectra VL Series 4 provides no information
+    pci_register_slot(0x00, PCI_CARD_NORTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x0D, PCI_CARD_ONBOARD, 4, 0, 0, 0);
+    pci_register_slot(0x07, PCI_CARD_NORMAL, 1, 2, 3, 4);
+    pci_register_slot(0x0A, PCI_CARD_NORMAL, 4, 1, 2, 3);
+    pci_register_slot(0x06, PCI_CARD_NORMAL, 3, 4, 1, 2);
+    pci_register_slot(0x0C, PCI_CARD_NORMAL, 2, 3, 4, 1);
+    pci_register_slot(0x0F, PCI_CARD_SOUTHBRIDGE, 0, 0, 0, 0);
+    
+    if (gfxcard == VID_INTERNAL)
+    /**
+     * 64V+ (765) on D3xxxA models
+     * 64 (764) on D3xxxB models
+    **/
+	device_add(&s3_phoenix_trio64vplus_onboard_pci_device);
+
+    device_add(&keyboard_ps2_ami_pci_device);
+    device_add(&i430fx_device);
+    device_add(&piix_device);
+    device_add(&fdc37c932qf_device);
+    device_add(&intel_flash_bxt_device);
+
+    return ret;
+}
+#endif
+
+
+// Broken: 86box crashes when loading ROM (incorrect ROM format?)
+int
+machine_at_vectra55_init(const machine_t *model)
+{
+    int ret;
+
+    /**
+     * Note: BIOS interfaces directly with SuperIO chip
+    **/
+
+    // wbb4z1us.exe
+    ret = bios_load_linear(L"roms/machines/vectra55/HA0711US.FUL",
+			   0x000c0000, 262144, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init_ex(model, 2);
+    //machine_at_common_init(model);
+
+    pci_init(PCI_CONFIG_TYPE_1);
+    /**
+     * Note: Information verified against HP technical reference manual for Vectra VL Series 5
+    **/
+    pci_register_slot(0x00, PCI_CARD_NORTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x0F, PCI_CARD_SOUTHBRIDGE, 0, 0, 0, 0);
+    pci_register_slot(0x0D, PCI_CARD_VIDEO, 4, 0, 0, 0);
+    pci_register_slot(0x07, PCI_CARD_NORMAL, 1, 2, 3, 4);
+    pci_register_slot(0x0A, PCI_CARD_NORMAL, 4, 1, 2, 3);
+    pci_register_slot(0x06, PCI_CARD_NORMAL, 3, 4, 1, 2);
+    pci_register_slot(0x0C, PCI_CARD_NORMAL, 2, 3, 4, 1);
+    
+    if (gfxcard == VID_INTERNAL)
+	device_add(&s3_phoenix_trio64v2_dx_onboard_pci_device);
+    
+
+    device_add(&i430hx_device);
+    device_add(&piix3_device);
+    device_add(&keyboard_ps2_ami_pci_device);
+    //verified against MB pictures
+    device_add(&fdc37c932qf_device);
+    device_add(&sst_flash_39sf020_device);
+    //device_add(&intel_flash_bxt_device);
+    //device_add(&intel_flash_bxb_device);
+
+    return ret;
+}

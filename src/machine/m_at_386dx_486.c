@@ -1130,3 +1130,165 @@ machine_at_pcm5330_init(const machine_t *model)
 
     return ret;
 }
+
+
+//not working (post code 0f 0e)
+int
+machine_at_epson_ax3_25_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/epson_ax3_25/EVAX25",
+				L"roms/machines/epson_ax3_25/ODAX25",
+				0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //found nothing
+    device_add(&addr_debugger_device);
+    
+    return ret;
+}
+
+//not working (post code 0f 0e)
+int
+machine_at_epson_ax4_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/epson_ax4/EVAX4",
+				L"roms/machines/epson_ax4/ODAX4",
+				0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    device_add(&keyboard_ps2_device);
+    device_add(&fdc_at_device);
+
+    //found 1b0-1bf
+    device_add(&addr_debugger_device);
+    
+    return ret;
+}
+
+
+// not working: keeps resetting
+int
+machine_at_olim4_4xxenh_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/olivetti_m4_4xx/SOLE208.ROM",
+			   0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init(model);
+
+    //device_add(&umc491_device);
+    //device_add(&via_vt82c49x_device);
+    device_add(&opti895_device);
+    device_add(&fdc37c665_device);
+    device_add(&keyboard_ps2_ami_device);
+    //device_add(&intel_flash_bxt_ami_device);
+    //device_add(&ide_opti611_vlb_device);
+    
+    if (gfxcard == VID_INTERNAL)
+	device_add(&gd5428_onboard_device);
+
+    return ret;
+}
+
+//not working, segfaults
+int
+machine_at_olim380_40_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/olivetti_m380_40/BIOS.ROM",
+				0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init(model);
+    device_add(&keyboard_ps2_olivetti_device);
+    
+    //device_add(&intel_flash_bxt_device);
+    
+    //102-103
+    device_add(&addr_debugger_device);
+
+    device_add(&fdc_at_device);
+
+    return ret;
+}
+
+int
+machine_at_bravolc4_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/bravolc4/AST.BIO",
+				0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init(model);
+    
+    device_add(&vl82c480_device);
+    
+    device_add(&keyboard_ps2_device);
+
+    //fb, ec, ed, 398, 26e
+    device_add(&addr_debugger_device);
+    
+    //device_add(&pc87311_ide_device); // presumably SMC 87312
+    //device_add(&intel_flash_bxb_device);
+    
+    //5428
+	if (gfxcard == VID_INTERNAL)
+    device_add(&paradise_wd90c30_device);
+
+    return ret;
+}
+
+int
+machine_at_prolinea4_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/prolinea4/COMPAQ.BIO",
+				0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init(model);
+    
+    //device_add(&vl82c480_device);
+    
+    device_add(&keyboard_ps2_device);
+
+    //fb, ec, ed, 398, 26e
+    device_add(&addr_debugger_device);
+    
+    //device_add(&pc87311_ide_device); // presumably SMC 87312
+    //device_add(&fdc37c665_ide_device);
+    //device_add(&intel_flash_bxb_device);
+    
+    //et4000
+	if (gfxcard == VID_INTERNAL)
+    device_add(&paradise_wd90c30_device);
+
+    return ret;
+}

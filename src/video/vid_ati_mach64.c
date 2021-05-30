@@ -76,7 +76,8 @@ typedef struct
 enum
 {
         MACH64_GX = 0,
-        MACH64_VT2
+        MACH64_VT2,
+        MACH64_CT
 };
 
 typedef struct mach64_t
@@ -3425,6 +3426,32 @@ static void *mach64vt2_init(const device_t *info)
         
         return mach64;
 }
+static void *mach64ct_onboard_init(const device_t *info)
+{
+        mach64_t *mach64 = mach64_common_init(info);
+        svga_t *svga = &mach64->svga;
+
+        if (info->flags & DEVICE_PCI)
+		video_inform(VIDEO_FLAG_TYPE_SPECIAL, &timing_mach64_pci);
+	else
+		video_inform(VIDEO_FLAG_TYPE_SPECIAL, &timing_mach64_vlb);
+
+        mach64->type = MACH64_CT;
+	mach64->pci = 1;
+        mach64->pci_id = 0x4354;
+        mach64->config_chip_id = 0x40004354;
+        mach64->dac_cntl = 1 << 16; /*Internal 24-bit DAC*/
+        mach64->config_stat0 = 4;
+        mach64->use_block_decoded_io = 4;
+        
+        //ati_eeprom_load(&mach64->eeprom, L"mach64ct.nvr", 1);
+
+        //rom_init(&mach64->bios_rom, BIOS_ROMVT2_PATH, 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
+        
+        svga->vblank_start = mach64_vblank_start;
+        
+        return mach64;
+}
 
 int mach64gx_available(void)
 {
@@ -3518,6 +3545,27 @@ static const device_config_t mach64vt2_config[] =
         }
 };
 
+static const device_config_t mach64ct_onboard_config[] =
+{
+        {
+                "memory", "Memory size", CONFIG_SELECTION, "", 2, "", { 0 },
+                {
+                        {
+                                "1 MB", 1
+                        },
+                        {
+                                "2 MB", 2
+                        },
+                        {
+                                ""
+                        }
+                }
+        },
+        {
+                "", "", -1
+        }
+};
+
 const device_t mach64gx_isa_device =
 {
         "ATI Mach64GX ISA",
@@ -3564,4 +3612,16 @@ const device_t mach64vt2_device =
         mach64_speed_changed,
         mach64_force_redraw,
         mach64vt2_config
+};
+
+const device_t mach64ct_onboard_pci_device =
+{
+        "ATI Mach64CT On-Board PCI",
+        DEVICE_PCI,
+	0,
+        mach64ct_onboard_init, mach64_close, NULL,
+        { NULL },
+        mach64_speed_changed,
+        mach64_force_redraw,
+        mach64ct_onboard_config
 };
