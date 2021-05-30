@@ -664,5 +664,8 @@ extern int	machine_xt_xi8088_init(const machine_t *);
 extern const device_t	*xi8088_get_device(void);
 #endif
 
+/* m_xt_cordata.c */
+extern int	machine_xt_cpc400_init(const machine_t *);
+
 
 #endif	/*EMU_MACHINE_H*/
