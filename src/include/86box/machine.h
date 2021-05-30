@@ -681,6 +681,7 @@ extern int	machine_at_epson_nb3s_init(const machine_t *);
 extern int  machine_at_epson_ax3_25_init(const machine_t *);
 
 extern int  machine_at_olim380_40_init(const machine_t *);
+extern int  machine_at_olim300_30_init(const machine_t *);
 
 //486
 extern int  machine_at_olim4_4xxenh_init(const machine_t *);

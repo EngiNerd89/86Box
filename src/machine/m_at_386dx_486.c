@@ -1232,6 +1232,37 @@ machine_at_olim380_40_init(const machine_t *model)
     return ret;
 }
 
+//not working
+int
+machine_at_olim300_30_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear(L"roms/machines/olivetti_m300_30/BIOS.ROM",
+				0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init(model);
+    
+    device_add(&vl82c480_device);
+    
+    device_add(&keyboard_ps2_olivetti_device);
+
+    //fb, ec, ed, 398, 26e
+    device_add(&addr_debugger_device);
+    
+    device_add(&pc87311_ide_device); // presumably SMC 87312
+    //device_add(&intel_flash_bxb_device);
+    
+    //90c31
+	if (gfxcard == VID_INTERNAL)
+    device_add(&paradise_wd90c30_device);
+
+    return ret;
+}
+
 int
 machine_at_bravolc4_init(const machine_t *model)
 {
