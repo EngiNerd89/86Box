@@ -1130,3 +1130,31 @@ machine_at_pcm5330_init(const machine_t *model)
 
     return ret;
 }
+
+//keyboard not working
+int
+machine_at_olim380_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved(L"roms/machines/olivetti_m380/PBVR_1.13.bin",
+				L"roms/machines/olivetti_m380/PBVQ_1.13.bin",
+			   0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init(model);
+
+    device_add(&keyboard_at_olivetti_device);
+
+    mem_remap_top(384);
+
+    // device_add(&addr_debugger_device);
+    
+    /* On-board FDC cannot be disabled */
+	device_add(&fdc_at_device);
+
+    return ret;
+}
+

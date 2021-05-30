@@ -436,6 +436,7 @@ const machine_t machines[] = {
     /* Miscellaneous/Fake/Hypervisor machines */
     { "[i440BX] Microsoft Virtual PC 2007",	"vpc2007",		MACHINE_TYPE_MISC,		CPU_PKG_SLOT1, CPU_BLOCK(CPU_PENTIUM2, CPU_CYRIX3S), 0, 0, 0, 0, 0, 0,						MACHINE_AGP | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL,		  		 8192,1048576, 8192, 255,	      machine_at_vpc2007_init, NULL			},
 
+    { "[ISA] Olivetti M380/M380C/M380C New/M380T/XP1/XP3/XP5",		"olivetti_m380",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 0, 0, 0, 0, 0, 0,										MACHINE_AT,									  1024,  65536,  256, 127,	 machine_at_olim380_init, NULL			},
     { NULL,					NULL,			MACHINE_TYPE_NONE,		0, 0, 0, 0, 0, 0, 0, 0,												0,										    0,      0,    0,   0,			         NULL, NULL			}
 };
 
