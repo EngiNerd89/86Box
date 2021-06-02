@@ -669,6 +669,8 @@ extern const device_t	*xi8088_get_device(void);
 /* Incomplete machines */
 
 extern int	machine_xt_olim15_init(const machine_t *);
+extern int	machine_xt_pc1_init(const machine_t *);
+extern int	machine_xt_srpartner_init(const machine_t *);
 
 // 286
 extern int	machine_at_pcd200_init(const machine_t *);
@@ -679,11 +681,13 @@ extern int	machine_at_epson_nb3s_init(const machine_t *);
 
 // 386DX
 extern int  machine_at_epson_ax3_25_init(const machine_t *);
+extern int  machine_at_ncrpc9_init(const machine_t *);
 
 extern int  machine_at_olim380_40_init(const machine_t *);
 extern int  machine_at_olim300_30_init(const machine_t *);
 
 //486
+extern int  machine_at_olim4_4x_init(const machine_t *);
 extern int  machine_at_olim4_4xxenh_init(const machine_t *);
 extern int  machine_at_epson_ax4_init(const machine_t *);
 extern int  machine_at_bravolc4_init(const machine_t *);

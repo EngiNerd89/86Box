@@ -400,3 +400,35 @@ machine_xt_multitechpc700_init(const machine_t *model)
     return ret;
 }
 
+//pit1 error
+int
+machine_xt_srpartner_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear("roms/machines/srpartner/nx01.bin",
+			   0x000fc000, 16384, 0);
+    
+    if (bios_only || !ret)
+	    return ret;
+
+    device_add(&keyboard_pc_device);
+
+    machine_common_init(model);
+
+    pit_ctr_set_out_func(&pit->counters[1], pit_refresh_timer_xt);
+
+    if (fdc_type == FDC_INTERNAL)	
+	    device_add(&fdc_xt_device);
+    
+    //6a-63
+    device_add(&addr_debugger_device);
+    
+    nmi_init();
+
+    if (joystick_type)
+	    device_add(&gameport_device);
+
+    return ret;
+}
+

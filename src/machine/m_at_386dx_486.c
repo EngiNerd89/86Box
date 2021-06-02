@@ -1323,3 +1323,62 @@ machine_at_prolinea4_init(const machine_t *model)
 
     return ret;
 }
+
+//not working
+//timer 1 error
+int
+machine_at_olim4_4x_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear("roms/machines/olivetti_m4_4x/EPROM.ROM",
+				0x000e0000, 131072, 0);
+    // for testing
+    // ret = bios_load_linear(L"roms/machines/olivetti_m4_4x/7500d_rev26_121593.bin",
+	// 			0x000e0000, 131072, 0);
+
+    if (bios_only || !ret)
+	return ret;
+
+    machine_at_common_init(model);
+
+    device_add(&keyboard_ps2_olivetti_device);
+
+    //22,23
+    device_add(&addr_debugger_device);
+
+    device_add(&pc87310_ide_device); // presumably SMC 87312
+    
+    //90c31
+	if (gfxcard == VID_INTERNAL)
+        device_add(&vga_device);
+
+    return ret;
+}
+
+// not working
+// timer one error 
+int
+machine_at_ncrpc9_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_linear("roms/machines/ncr_pc9/ncr_386_card_04152_u44_ver5.0.bin",
+				0x000f0000, 65536, 0);
+    
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_init(model);
+    
+    device_add(&keyboard_at_ncr_device);
+    mem_remap_top(384);
+
+    if (fdc_type == FDC_INTERNAL)	
+	    device_add(&fdc_at_device);
+    
+    //6a
+    device_add(&addr_debugger_device);    
+    
+    return ret;
+}

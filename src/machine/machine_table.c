@@ -440,6 +440,8 @@ const machine_t machines[] = {
     // 8088
     { "[8088] Olivetti Prodest PC1",		"olivetti_pc1",			MACHINE_TYPE_8088,		CPU_PKG_8088, 0, 0, 0, 0, 0, 0, 0,                               MACHINE_PC | MACHINE_VIDEO_FIXED,					 256,  640,  256,   0,		 machine_xt_pc1_init, NULL			},
     { "[8088] HeadStart LX",	        "headstart_lx",	MACHINE_TYPE_8088,		CPU_PKG_8088, 0, 0, 0, 0, 0, 0, 0,										MACHINE_PC | MACHINE_XTA,									   256,  1024,  128,   0,		machine_xt_headstart_lx_init, NULL			},
+    { "[8088] Olivetti M15",		"olivetti_m15",			MACHINE_TYPE_8088,		CPU_PKG_8088, 0, 0, 0, 0, 0, 0, 0,                               MACHINE_PC | MACHINE_VIDEO_FIXED,					 256,  640,  256,   0,		 machine_xt_olim15_init, NULL			},
+    { "[8088] Panasonic Sr Partner",	"srpartner",		MACHINE_TYPE_8088,		CPU_PKG_8088, 0, 0, 0, 0, 0, 0, 0,										MACHINE_PC,									   128,    640,  64,    0,		      machine_xt_srpartner_init, NULL			},
     // 286
     { "[ISA] Philips PCD-200 Series",		"pcd200",		MACHINE_TYPE_286,		CPU_PKG_286, 0, 0, 0, 0, 0, 0, 0,                                   MACHINE_AT | MACHINE_VIDEO,									512,16384, 128, 127,		machine_at_pcd200_init, NULL			},
     // 386SX
@@ -448,7 +450,9 @@ const machine_t machines[] = {
     // 386DX
     { "[ISA] Olivetti M380-40",		"olivetti_m380_40",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 0, 0, 0, 0, 0, 0,										MACHINE_AT,									  512,  8192,  128, 127,	 machine_at_olim380_40_init, NULL			},
     { "[ISA] EPSON PC-AX3/25",		"epson_ax3_25",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 25000000, 25000000, 0, 0, 0, 0,										MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE,				  2048,  16384,  1024, 127,	 machine_at_epson_ax3_25_init, NULL			},
+    { "[ISA] NCR PC916/920",		"ncr_pc9",		MACHINE_TYPE_386DX,		CPU_PKG_386DX, 0, 16000000, 20000000, 0, 0, 0, 0, 									MACHINE_AT,			1024, 16384, 128, 127,		 machine_at_ncrpc9_init, NULL			},
     // 486
+    { "[ET6000] Olivetti M4-4x/6x",	"olivetti_m4_4x",		MACHINE_TYPE_486,		CPU_PKG_SOCKET1, 0, 0, 0, 0, 0, 0, 0,                       MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO,						4096,   36864,   2048, 127,	  machine_at_olim4_4x_init, NULL			},
     { "[UMC 491] Olivetti M4-4xx Enhanced",	"olivetti_m4_4xxenh",		MACHINE_TYPE_486,		CPU_PKG_SOCKET1, 0, 0, 0, 0, 0, 0, 0,                       MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE_DUAL | MACHINE_VIDEO,					4096,   36864,   2048, 127,	  machine_at_olim4_4xxenh_init, NULL			},
     { "[VLSI 82C483] AST Bravo LC4",	"bravolc4",		MACHINE_TYPE_486,		CPU_PKG_SOCKET1, 0, 0, 0, 0, 0, 0, 0,                       MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO,						4096,   36864,   2048, 127,	  machine_at_bravolc4_init, NULL			},
     { "[VLSI 82C483] Compaq Prolinea 4",	"prolinea4",		MACHINE_TYPE_486,		CPU_PKG_SOCKET1, 0, 0, 0, 0, 0, 0, 0,                       MACHINE_AT | MACHINE_BUS_PS2 | MACHINE_IDE | MACHINE_VIDEO,						4096,   36864,   2048, 127,	  machine_at_prolinea4_init, NULL			},
