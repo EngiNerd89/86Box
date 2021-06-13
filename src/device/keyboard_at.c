@@ -93,6 +93,7 @@
 #define KBC_VEN_SAMSUNG		0x2c
 #define KBC_VEN_MASK		0x3c
 
+// #define ENABLE_KEYBOARD_AT_LOG 1
 
 typedef struct {
     uint8_t	command, status, old_status, out, old_out, secr_phase,
@@ -1230,7 +1231,7 @@ write64_generic(void *priv, uint8_t val)
 		} else if (kbc_ven == KBC_VEN_NCR) {
 			/* switch settings
 			 * bit 7: keyboard disable
-			 * bit 6: display type (0 color, 1 mono)
+			 * bit 6: display type (0 color, 1 mono, used only for mda/cga cards)
 			 * bit 5: power-on default speed (0 high, 1 low)
 			 * bit 4: sense RAM size (0 unsupported, 1 512k on system board)
 			 * bit 3: coprocessor detect

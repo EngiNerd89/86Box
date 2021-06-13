@@ -54,6 +54,7 @@
 #define STAT_IFULL      0x02
 #define STAT_OFULL      0x01
 
+// #define ENABLE_KEYBOARD_XT_LOG 1
 
 typedef struct {
     int want_irq;        
@@ -502,6 +503,8 @@ kbd_write(uint16_t port, uint8_t val, void *priv)
 {
     xtkbd_t *kbd = (xtkbd_t *)priv;
 
+    kbd_log("XTKBC: Write %02x at %02x\n", val, port);
+
     switch (port) {
 	case 0x61:
 		if (!(kbd->pb & 0x40) && (val & 0x40)) {
@@ -635,6 +638,8 @@ kbd_read(uint16_t port, void *priv)
         
 		break;
     }
+
+    kbd_log("XTKBC: Read %02x at %02x\n", ret, port);
 
     return(ret);
 }

@@ -871,3 +871,57 @@ machine_at_m30015_init(const machine_t *model)
     return ret;
 }
 
+/*
+ * Current bugs: 
+ * - RLL/MFM/ESDI hard disk controllers do not work
+ */
+int
+machine_at_epson_ax_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved("roms/machines/epson_ax/EVAX",
+				"roms/machines/epson_ax/ODAX",
+				0x000f8000, 32768, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_init(model);
+    mem_remap_top(384);
+
+    device_add(&keyboard_at_device);
+
+    if (fdc_type == FDC_INTERNAL)	
+	    device_add(&fdc_at_device);
+    
+    return ret;
+}
+
+/*
+ * Current bugs:
+ * - RLL/MFM/ESDI hard disk controllers do not work, thus IDE controller is used instead of on-board MFM
+ */
+int
+machine_at_epson_axport_init(const machine_t *model)
+{
+    int ret;
+
+    ret = bios_load_interleaved("roms/machines/epson_axport/AXPEV",
+				"roms/machines/epson_axport/AXPOD",
+				0x000f0000, 65536, 0);
+
+    if (bios_only || !ret)
+	    return ret;
+
+    machine_at_common_ide_init(model);
+    mem_remap_top(384);
+
+    device_add(&keyboard_at_device);
+    device_add(&fdc_at_device);
+
+    device_add(&cga_device);
+    
+    return ret;
+}
+

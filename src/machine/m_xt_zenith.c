@@ -46,7 +46,7 @@
 #include <86box/machine.h>
 #include <86box/io.h>
 #include <86box/vid_cga.h>
-
+#include <86box/chipset.h>
 
 typedef struct {
     mem_mapping_t scratchpad_mapping;
@@ -156,7 +156,15 @@ machine_xt_z184_init(const machine_t *model)
     device_add(&i8250_device);
     serial_set_next_inst(2);	/* So that serial_standalone_init() won't do anything. */
         
+    //6355 lcd display controller -> take from varcem
     device_add(&cga_device);
+
+    //add 26-pin JVC hard drive once documented
+
+    //50-5f calendar (RP5C15), int 0a -> take from varcem
+    //c0-d7 rtc
+    device_add(&addr_debugger_device);
+    
     
     return ret;
 }
@@ -196,7 +204,7 @@ machine_xt_z159_init(const machine_t *model)
 	    return ret;
 
     machine_zenith_init(model);
-    
+
     /* parallel port is on the memory board */
     lpt1_remove();	/* only one parallel port */
     lpt2_remove();

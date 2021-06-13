@@ -163,6 +163,11 @@ machine_xt_philips_common_init(const machine_t *model)
 
 }
 
+/*
+ * Current bugs and limitations:
+ * - custom rtc not implemented
+ * - 640-768 conventional memory not usable (should be available at address d0000-effff)
+ */
 int
 machine_xt_p3105_init(const machine_t *model)
 {
@@ -182,6 +187,10 @@ machine_xt_p3105_init(const machine_t *model)
     return ret;
 }
 
+/*
+ * Current bugs and limitations:
+ * - 640-768 conventional memory not usable (should be available at address d0000-effff)
+ */
 int
 machine_xt_p3120_init(const machine_t *model)
 {
